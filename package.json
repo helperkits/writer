@@ -1,0 +1,43 @@
+{
+	"name": "@helperkits/writer",
+	"version": "1.0.0",
+	"main": "./dist/index.js",
+	"type": "module",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist/"
+	],
+	"scripts": {
+		"start": "tsc && node dist/index.js",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"build": "tsc",
+		"watch": "tsc -w"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"homepage": "https://github.com/helperkits/timer",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/helperkits/timer.git"
+	},
+	"bugs": {
+		"url": "https://github.com/helperkits/timer/issues"
+	},
+	"keywords": [
+		"public transit",
+		"version",
+		"lint"
+	],
+	"author": "João de Vasconcelos",
+	"license": "AGPL-3.0-or-later",
+	"dependencies": {
+		"@helperkits/logger": "20240626.1649.28",
+		"@helperkits/timer": "20240623.52.16"
+	},
+	"devDependencies": {
+		"@carrismetropolitana/eslint": "20240622.50.2",
+		"@types/node": "20.14.9"
+	}
+}
