@@ -17,20 +17,22 @@ interface MongoDbWriterOptions {
 export default class MongoDbWriter {
 	//
 
-	CURRENT_BATCH_DATA = [];
+	private CURRENT_BATCH_DATA = [];
 
-	DB_COLLECTION = null;
+	private DB_COLLECTION = null;
 
-	INSTANCE_NAME = 'Unnamed Instance';
+	private INSTANCE_NAME = 'Unnamed Instance';
 
-	MAX_BATCH_SIZE = 3000;
+	private MAX_BATCH_SIZE = 3000;
+
+	private SESSION_TIMER = new TIMETRACKER();
 
 	/* * */
 
-	constructor(instanceName, collection, options: MongoDbWriterOptions = {}) {
+	constructor(instanceName: string, collection, options?: MongoDbWriterOptions) {
 		if (instanceName) this.INSTANCE_NAME = instanceName;
 		if (collection) this.DB_COLLECTION = collection;
-		if (options.batch_size) this.MAX_BATCH_SIZE = options.batch_size;
+		if (options?.batch_size) this.MAX_BATCH_SIZE = options.batch_size;
 	}
 
 	/* * */
@@ -40,6 +42,7 @@ export default class MongoDbWriter {
 			//
 
 			const flushTimer = new TIMETRACKER();
+			const sssionTimerResult = this.SESSION_TIMER.get();
 
 			if (this.CURRENT_BATCH_DATA.length === 0) return;
 
@@ -67,14 +70,14 @@ export default class MongoDbWriter {
 
 			await this.DB_COLLECTION.bulkWrite(writeOperations);
 
-			LOGGER.info(`DBWRITER [${this.INSTANCE_NAME}]: Flush Request | Length: ${this.CURRENT_BATCH_DATA.length} | DB Collection: ${this.DB_COLLECTION.collectionName} (${flushTimer.get()})`);
+			LOGGER.info(`MONGODBWRITER [${this.INSTANCE_NAME}]: Flush | Length: ${this.CURRENT_BATCH_DATA.length} | DB Collection: ${this.DB_COLLECTION.collectionName} (session: ${sssionTimerResult}) (flush: ${flushTimer.get()})`);
 
 			this.CURRENT_BATCH_DATA = [];
 
 			//
 		}
 		catch (error) {
-			LOGGER.error(`Error at DBWRITER.flush(): ${error.message}`);
+			LOGGER.error(`MONGODBWRITER [${this.INSTANCE_NAME}]: Error @ flush(): ${error.message}`);
 		}
 	}
 
@@ -84,6 +87,10 @@ export default class MongoDbWriter {
 		// Check if the batch is full
 		if (this.CURRENT_BATCH_DATA.length >= this.MAX_BATCH_SIZE) {
 			await this.flush();
+		}
+		// Reset the timer
+		if (this.CURRENT_BATCH_DATA.length === 0) {
+			this.SESSION_TIMER.reset();
 		}
 		// Add the data to the batch
 		if (Array.isArray(data)) {
