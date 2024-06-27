@@ -8,10 +8,10 @@
 		"dist/"
 	],
 	"scripts": {
-		"start": "tsc && node dist/index.js",
+		"start": "tsc && resolve-tspaths && node dist/index.js",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"build": "tsc",
+		"build": "tsc && resolve-tspaths",
 		"watch": "tsc -w"
 	},
 	"publishConfig": {
@@ -34,10 +34,12 @@
 	"license": "AGPL-3.0-or-later",
 	"dependencies": {
 		"@helperkits/logger": "20240626.1649.28",
-		"@helperkits/timer": "20240626.2357.33"
+		"@helperkits/timer": "20240627.16.17"
 	},
 	"devDependencies": {
 		"@carrismetropolitana/eslint": "20240622.50.2",
-		"@types/node": "20.14.9"
+		"@types/node": "20.14.9",
+		"resolve-tspaths": "0.8.19",
+		"typescript": "5.5.2"
 	}
 }
