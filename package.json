@@ -33,8 +33,8 @@
 	"author": "João de Vasconcelos",
 	"license": "AGPL-3.0-or-later",
 	"dependencies": {
-		"@helperkits/logger": "20240626.1649.28",
-		"@helperkits/timer": "20240627.16.17"
+		"@helperkits/logger": "20240627.29.51",
+		"@helperkits/timer": "20240627.30.3"
 	},
 	"devDependencies": {
 		"@carrismetropolitana/eslint": "20240622.50.2",
