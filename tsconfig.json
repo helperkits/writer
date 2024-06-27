@@ -1,17 +1,18 @@
 {
 	"compilerOptions": {
 		"target": "ESNext",
-		"baseUrl": "./",
-		"rootDir": "./",
+		"baseUrl": ".",
+		"rootDir": ".",
 		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"paths": {
 			"@/writers/*": ["writers/*"],
 		},
 		"allowJs": true,
-		"outDir": "build",
+		"outDir": "dist",
 		"sourceMap": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"declaration": true
 	},
-	"exclude": ["**/node_modules", "**/.*/", "**/build/"]
+	"exclude": ["**/node_modules", "**/.*/", "**/dist/"]
 }
