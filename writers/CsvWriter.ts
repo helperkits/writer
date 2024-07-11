@@ -7,14 +7,14 @@ import Papa from 'papaparse';
 
 /* * */
 
-interface FileWriterOptions {
+interface CsvWriterOptions {
 	batch_size?: number
 	new_line_character?: string
 }
 
 /* * */
 
-export default class FileWriter {
+export default class CsvWriter {
 	//
 
 	private CURRENT_BATCH_DATA = [];
@@ -31,7 +31,7 @@ export default class FileWriter {
 
 	/* * */
 
-	constructor(instanceName: string, filePath, options?: FileWriterOptions) {
+	constructor(instanceName: string, filePath, options?: CsvWriterOptions) {
 		if (instanceName) this.INSTANCE_NAME = instanceName;
 		if (filePath) this.FILE_PATH = filePath;
 		if (options?.batch_size) this.MAX_BATCH_SIZE = options.batch_size;
@@ -80,7 +80,7 @@ export default class FileWriter {
 						}
 						else {
 							this.CURRENT_BATCH_DATA = [];
-							LOGGER.info(`FILEWRITER [${this.INSTANCE_NAME}]: Flush | Length: ${this.CURRENT_BATCH_DATA.length} | File Path: ${this.FILE_PATH} (session: ${sssionTimerResult}) (flush: ${flushTimer.get()})`);
+							LOGGER.info(`CSVWRITER [${this.INSTANCE_NAME}]: Flush | Length: ${this.CURRENT_BATCH_DATA.length} | File Path: ${this.FILE_PATH} (session: ${sssionTimerResult}) (flush: ${flushTimer.get()})`);
 							resolve();
 						}
 					});
@@ -98,7 +98,7 @@ export default class FileWriter {
 
 	/* * */
 
-	async write(workdir, filename, data) {
+	async write(workdir: string, filename: string, data) {
 		// Check if the batch workdir is the same of the current operation
 		if (this.FILE_PATH !== `${workdir}/${filename}`) {
 			await this.flush();
