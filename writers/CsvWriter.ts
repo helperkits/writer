@@ -31,9 +31,9 @@ export default class CsvWriter {
 
 	/* * */
 
-	constructor(instanceName: string, filePath, options?: CsvWriterOptions) {
-		if (instanceName) this.INSTANCE_NAME = instanceName;
-		if (filePath) this.FILE_PATH = filePath;
+	constructor(instanceName: string, filePath: string, options?: CsvWriterOptions) {
+		this.INSTANCE_NAME = instanceName;
+		this.FILE_PATH = filePath;
 		if (options?.batch_size) this.MAX_BATCH_SIZE = options.batch_size;
 		if (options?.new_line_character) this.NEW_LINE_CHARACTER = options.new_line_character;
 	}
@@ -98,12 +98,7 @@ export default class CsvWriter {
 
 	/* * */
 
-	async write(workdir: string, filename: string, data) {
-		// Check if the batch workdir is the same of the current operation
-		if (this.FILE_PATH !== `${workdir}/${filename}`) {
-			await this.flush();
-		}
-
+	async write(data) {
 		// Check if the batch is full
 		if (this.CURRENT_BATCH_DATA.length >= this.MAX_BATCH_SIZE) {
 			await this.flush();
@@ -113,9 +108,6 @@ export default class CsvWriter {
 		if (this.CURRENT_BATCH_DATA.length === 0) {
 			this.SESSION_TIMER.reset();
 		}
-
-		// Set the working dir
-		this.FILE_PATH = `${workdir}/${filename}`;
 
 		// Add the data to the batch
 		if (Array.isArray(data)) {
