@@ -4,7 +4,9 @@
 	"type": "module",
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
-	"files": ["dist/"],
+	"files": [
+		"dist/"
+	],
 	"scripts": {
 		"start": "tsc && resolve-tspaths && node dist/index.js",
 		"lint": "eslint .",
@@ -31,13 +33,14 @@
 	"author": "João de Vasconcelos",
 	"license": "AGPL-3.0-or-later",
 	"dependencies": {
-		"@helperkits/logger": "20240627.29.51",
-		"@helperkits/timer": "20240627.30.3"
+		"@helperkits/logger": "20240703.1726.24",
+		"@helperkits/timer": "20240627.34.23",
+		"papaparse": "5.4.1"
 	},
 	"devDependencies": {
 		"@carrismetropolitana/eslint": "20240622.50.2",
-		"@types/node": "20.14.9",
+		"@types/node": "20.14.10",
 		"resolve-tspaths": "0.8.19",
-		"typescript": "5.5.2"
+		"typescript": "5.5.3"
 	}
 }
