@@ -23,7 +23,7 @@ export default class CsvWriter {
 
 	private INSTANCE_NAME = 'Unnamed Instance';
 
-	private MAX_BATCH_SIZE = 3000;
+	private MAX_BATCH_SIZE = 5000;
 
 	private NEW_LINE_CHARACTER = '\n';
 
@@ -79,8 +79,8 @@ export default class CsvWriter {
 							reject(new Error(`Error appending data to file: ${appendErr.message}`));
 						}
 						else {
-							this.CURRENT_BATCH_DATA = [];
 							LOGGER.info(`CSVWRITER [${this.INSTANCE_NAME}]: Flush | Length: ${this.CURRENT_BATCH_DATA.length} | File Path: ${this.FILE_PATH} (session: ${sssionTimerResult}) (flush: ${flushTimer.get()})`);
+							this.CURRENT_BATCH_DATA = [];
 							resolve();
 						}
 					});
