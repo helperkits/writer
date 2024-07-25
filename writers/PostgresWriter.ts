@@ -9,7 +9,6 @@ interface PostgresWriterOptions {
 	batch_size?: number
 	filter?: object
 	upsert?: boolean
-	write_mode?: 'replace' | 'update'
 }
 
 /* * */
