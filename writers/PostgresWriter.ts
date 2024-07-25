@@ -11,7 +11,7 @@ interface PostgresWriterOptions {
 
 /* * */
 
-export class PostgresWriter {
+export default class PostgresWriter {
 	//
 
 	private CURRENT_BATCH_DATA = [];
