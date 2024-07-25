@@ -7,8 +7,6 @@ import TIMETRACKER from '@helperkits/timer';
 
 interface PostgresWriterOptions {
 	batch_size?: number
-	filter?: object
-	upsert?: boolean
 }
 
 /* * */
