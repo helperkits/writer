@@ -11,7 +11,7 @@ interface PostgresWriterOptions {
 
 /* * */
 
-export default class PostgresWriter {
+export class PostgresWriter {
 	//
 
 	private CURRENT_BATCH_DATA = [];
@@ -22,7 +22,7 @@ export default class PostgresWriter {
 
 	private INSTANCE_NAME = 'Unnamed Instance';
 
-	private MAX_BATCH_SIZE = 3000;
+	private MAX_BATCH_SIZE = 250;
 
 	private SESSION_TIMER = new TIMETRACKER();
 
@@ -46,20 +46,24 @@ export default class PostgresWriter {
 
 			if (this.CURRENT_BATCH_DATA.length === 0) return;
 
-			const keys = Object.keys(this.CURRENT_BATCH_DATA[0]);
-			const valuesPlaceholder = keys.map((_, i) => `$${i + 1}`).join(',');
+			const columns = Object.keys(this.CURRENT_BATCH_DATA[0]);
+
+			const values = [];
+			const placeholders = this.CURRENT_BATCH_DATA.map((item) => {
+				const rowValues = columns.map((key) => {
+					values.push(item[key]);
+					return `$${values.length}`;
+				});
+				return `(${rowValues.join(', ')})`;
+			});
 
 			const insertQuery = `
-				INSERT INTO ${this.DB_TABLE} (${keys.join(',')})
-				VALUES (${valuesPlaceholder})
+				INSERT INTO ${this.DB_TABLE} (${columns.join(', ')})
+				VALUES ${placeholders.join(', ')}
 				ON CONFLICT DO NOTHING;
 			`;
 
-			for (let i = 0; i < this.CURRENT_BATCH_DATA.length; i += this.MAX_BATCH_SIZE) {
-				const batch = this.CURRENT_BATCH_DATA.slice(i, i + this.MAX_BATCH_SIZE);
-				const values = batch.map(item => keys.map(key => item[key]));
-				await this.DB_CLIENT.query(insertQuery, values.flat());
-			}
+			await this.DB_CLIENT.query(insertQuery, values);
 
 			LOGGER.info(`POSTGRESWRITER [${this.INSTANCE_NAME}]: Flush | Length: ${this.CURRENT_BATCH_DATA.length} | DB Table: ${this.DB_TABLE} (session: ${sssionTimerResult}) (flush: ${flushTimer.get()})`);
 
@@ -89,7 +93,7 @@ export default class PostgresWriter {
 			this.CURRENT_BATCH_DATA = [...this.CURRENT_BATCH_DATA, ...combinedDataWithOptions];
 		}
 		else {
-			this.CURRENT_BATCH_DATA.push({ data: data, options: options });
+			this.CURRENT_BATCH_DATA.push(data);
 		}
 		//
 	}
