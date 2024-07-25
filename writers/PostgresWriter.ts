@@ -28,9 +28,10 @@ export default class PostgresWriter {
 
 	/* * */
 
-	constructor(instanceName: string, collection, options?: PostgresWriterOptions) {
+	constructor(instanceName: string, client, table, options?: PostgresWriterOptions) {
 		if (instanceName) this.INSTANCE_NAME = instanceName;
-		if (collection) this.DB_CLIENT = collection;
+		if (client) this.DB_CLIENT = client;
+		if (table) this.DB_TABLE = table;
 		if (options?.batch_size) this.MAX_BATCH_SIZE = options.batch_size;
 	}
 
