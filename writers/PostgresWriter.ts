@@ -59,7 +59,8 @@ export default class PostgresWriter {
 
 			const insertQuery = `
 				INSERT INTO ${this.DB_TABLE} (${columns.join(', ')})
-				VALUES ${placeholders.join(', ')};
+				VALUES (${placeholders.join(', ')})
+				ON CONFLICT DO UPDATE SET ${columns.map(col => `${col} = EXCLUDED.${col}`).join(', ')};
 			`;
 
 			await this.DB_CLIENT.query(insertQuery, values);
