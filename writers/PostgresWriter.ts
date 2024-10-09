@@ -60,7 +60,7 @@ export default class PostgresWriter {
 			const insertQuery = `
 				INSERT INTO ${this.DB_TABLE} (${columns.join(', ')})
 				VALUES ${placeholders.join(', ')}
-				ON CONFLICT DO NOTHING;
+				ON CONFLICT DO UPDATE;
 			`;
 
 			await this.DB_CLIENT.query(insertQuery, values);
