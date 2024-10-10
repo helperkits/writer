@@ -58,10 +58,11 @@ export default class PostgresWriter {
 			});
 
 			const insertQuery = `
+				BEGIN;
+				DELETE FROM ${this.DB_TABLE} WHERE code = $1;
 				INSERT INTO ${this.DB_TABLE} (${columns.join(', ')})
-				VALUES (${placeholders.join(', ')})
-				ON CONFLICT (code)
-				DO UPDATE SET ${columns.map(col => `${col} = EXCLUDED.${col}`).join(', ')};
+				VALUES (${placeholders.join(', ')});
+				COMMIT;
 			`;
 
 			await this.DB_CLIENT.query(insertQuery, values);
